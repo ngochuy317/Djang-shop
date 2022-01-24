@@ -1,0 +1,158 @@
+{% extends 'home/homebase.html' %}
+
+{% block title %} Order Detail {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">Order Detail</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+					<div class="col-md-3">
+						{% include "user/user_panel.html" %}
+					</div>
+					<div class="col-md-9">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+                              
+								<h3 class="title">Order Detail #{{order.id}} </h3>
+                                
+							</div>
+						<table class="shopping-cart-table table">
+                            <tr>
+                                <th class="text-left">Name Surname</th>
+                                <td class="text-left">{{ order.first_name}} {{ order.last_name }} </td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Phone</th>
+                                <td class="text-left">{{ order.phone}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Address</th>
+                                <td class="text-left">{{ order.address}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">City</th>
+                                <td class="text-left">{{ order.city}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Country</th>
+                                <td class="text-left">{{ order.country}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Status</th>
+                                    {% if order.status == 'New' or order.status == 'Preparing'%}
+                                    <td class="text-left"><span style="background-color:#3498db; color:white; padding:5px">{{ order.status}}</span> </td>
+									{% elif order.status == 'Accepted' or order.status == 'Completed'  %}
+									<td class="text-left"><span style="background-color:#27ae60; color:white;padding:5px">{{ order.status}}</span> </td>
+                                    {% elif order.status == 'OnShipping'%}
+									<td class="text-left"><span style="background-color:#f1c40f; color:white;padding:5px">{{ order.status}}</span> </td>
+                                    {% else %}
+									<td class="text-left"><span style="background-color:#e74c3c; color:white;padding:5px">{{ order.status}}</span> </td>
+									{% endif %} 
+                                {% comment %} <td class="text-left">{{ order.status}}</td> {% endcomment %}
+                            </tr>
+
+                            <tr>
+                                <th class="text-left">Date</th>
+                                <td class="text-left">{{ order.create_at}}</td>
+                            </tr>
+
+                            <th class="text-left">Shipping Inf</th>
+                            <td class="text-left">{{ order.adminnote}}</td>
+                            </tr>
+
+                        </table>
+
+                        <div class="section-title">
+                            <h4 class="title">Order Item List</h4>
+                        </div>
+
+                        <table class="shopping-cart-table table">
+                            <thead>
+                            <tr>
+                                <th class="text-center"></th>
+                                <th class="text-center">Product Name </th>
+                                <th class="text-center">Price </th>
+                                <th class="text-center">Quantity </th>
+                                <th class="text-center">Amount </th>
+                                <th class="text-center">Date </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for rs in orderDetails %}
+                                    <tr>
+                                        <td class="text-left">
+                                            <a href="/product/{{ rs.product_id }}/{{ rs.product.slug }}">
+                                                    <img src="{{rs.product.image.url}}" alt="" style="height: 50px">
+                                            </a>
+                                        </td>
+                                        <td class="text-left">{{ rs.product.title}}</td>
+                                        <td class="text-left">{{ rs.price}} </td>
+                                        <td class="text-left">{{ rs.quantity}} </td>
+                                        <td class="text-left">{{ rs.amount}} </td>
+                                        <td class="text-left">{{ rs.create_at}} </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th class="empty" colspan="4"></th>
+                                    <th>SUBTOTAL</th>
+                                    <th id="subtotal" colspan="2" class="sub-total">${{order.total}}</th>
+                                </tr>
+                                <tr>
+                                    <th class="empty" colspan="4"></th>
+                                    <th>PROMOTION</th>
+                                    <td colspan="2" id="promotion-code">
+                                    {% if order.voucher.discount %}
+                                        -{{order.voucher.discount}}%
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <th class="empty" colspan="4"></th>
+                                    <th>SHIPING</th>
+                                    <td colspan="2">Free Shipping</td>
+                                </tr>
+                                <tr>
+                                    <th class="empty" colspan="4"></th>
+                                    <th>TOTAL</th>
+                                    <th id="total" colspan="2" class="total">${{order.total_after_used_voucher}}</th>
+                                </tr>
+                            </tfoot>
+                            
+                        </table>
+                        
+						</div>
+
+					</div>
+
+					
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock %}

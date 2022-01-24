@@ -1,0 +1,104 @@
+{% load static %}
+	<!-- FOOTER -->
+
+	<footer id="footer" class="section section-grey">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<!-- footer logo -->
+						<div class="footer-logo">
+							<a class="logo" href="#">
+		            <img src="{% static 'img/logo.png' %}" alt="">
+		          </a>
+						</div>
+						<!-- /footer logo -->
+
+						<p>Legal Name: Đồng Hồ FPT  <br>
+							FPT Uni, Saigon Hi-tech part, District 9, HCMC <br>
+							Phone: +84 79 7779 7779 <br>
+							Email: donghofpt@gmail.com</p>
+
+						<!-- footer social -->
+						<ul class="footer-social">
+							<li><a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true"><i class="fa fa-pinterest"></i></a></li>
+						</ul>
+						<!-- /footer social -->
+					</div>
+				</div>
+				<!-- /footer widget -->
+
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<h3 class="footer-header">Guide</h3>
+						<ul class="list-links">
+							<li><a href="{% url 'home:contact' %}">Question & Answers</a></li>
+							<li><a href="{% url 'home:return_policy' %}">Shiping & Return</a></li>
+							<li><a href="{% url 'home:shipping_policy' %}">Shiping Guide</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- /footer widget -->
+
+				<div class="clearfix visible-sm visible-xs"></div>
+
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<h3 class="footer-header">Customer Service</h3>
+						<ul class="list-links">
+							<li><a href="{% url 'home:aboutus' %}">About Us</a></li>
+							<li><a href="{% url 'home:privacyPolicy' %}">Privacy Policy</a></li>
+							<li><a href="{% url 'home:payment_policy' %}">Payment Policy</a></li>
+							<li><a href="{% url 'home:warranty_policy' %}">Warranty Policy</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- /footer widget -->
+		
+				<!-- footer subscribe -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+					<h3 class="footer-header">Certification</h3>
+						<img style="width: 160px;" src="{% static 'img/dathongbao.png' %}" alt="shopdongho.com" class="lazyloaded" data-ll-status="loaded">
+						<img style="width: 160px; margin: 10px 0;" src="{% static 'img/noi-khong-voi-hang-gia.png' %}" alt="shopdongho.com" class="lazyloaded" data-ll-status="loaded">
+					</div>
+				</div>
+				<!-- /footer subscribe -->
+			</div>
+			<!-- /row -->
+			<hr>
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<!-- footer copyright -->
+					<div class="footer-copyright">
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved |  <a href="https://www.facebook.com/profile.php?id=100066991490141&show_switched_toast=true" target="_blank">FPT Watch Shop</a>
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					</div>
+					<!-- /footer copyright -->
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</footer>
+	<!-- /FOOTER -->
+
+	<!-- jQuery Plugins -->
+
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/slick.min.js' %}"></script>
+	<script src="{% static 'js/nouislider.min.js' %}"></script>
+	<script src="{% static 'js/jquery.zoom.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+

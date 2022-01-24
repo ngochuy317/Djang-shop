@@ -1,0 +1,194 @@
+{% extends 'home/homebase.html' %}
+
+{% block title %} {{ query }} results {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+	<style>
+		a.disabled {
+			pointer-events: none;
+			color: white;
+			background-color: #ccc;
+		}
+		a.del {
+		text-decoration: line-through;
+		}
+	</style>
+	<!-- add modal -->
+	{% comment %} <div style="height: 118px; background-color: black;" class=""></div> {% endcomment %}
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Notification</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			Add to cart success
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+	</div>
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">{{ query }} results</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+
+				<!-- MAIN -->
+				<div id="main" class="col-md-12">
+					<!-- store top filter -->
+					<!-- /store top filter -->
+
+					<!-- STORE -->
+					<div id="store">
+						<!-- row -->
+						<div class="row">
+						<div class="col-md-12">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title">Product List</h3>
+							</div>
+							<table class="shopping-cart-table table">
+								<thead>
+									<tr>
+										<th>Product</th>
+										<th></th>
+										<th class="text-center">Price</th>
+										{% comment %} <th class="text-center">Quantity</th> {% endcomment %}
+										<th class="text-right"></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for rs in products %}
+									<tr>
+										<td class="thumb">
+										<img src="{{rs.image.url}}" alt=""></td>
+										<td class="details">
+											<a href="/product/{{rs.id}}/{{rs.slug}}">{{rs.title}}</a>
+										</td>
+										<td class="price text-center">
+										{% if rs.discount_price %}
+											<strong>${{rs.discount_price}}</strong><br>
+											<del class="font-weak"><small>${{rs.price}}</small></del>
+										{% else %}
+											<strong>${{rs.price}}</strong>
+										{% endif %}
+										</td>
+										<form>
+										{% comment %} <td class="qty text-center"><input id="quantity_input" class="input" name="quantity" type="number" min="1" max="{{rs.amount}}" required></td> {% endcomment %}
+										<td class="text-right">
+										{% comment %} <a href="/order/addtoshopcart/{{rs.id}}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a> {% endcomment %}
+										<a href="#" id="add-cart-button" value="{{rs.id}}" class="primary-btn add-to-cart 
+										{% if rs.amount == 0 %}
+											disabled del
+										{% endif %}">
+										<i class="fa fa-shopping-cart"></i> Add to Cart</a>
+										</td>
+										</form>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /STORE -->
+
+					<!-- store bottom filter -->
+					{% comment %} <div class="store-filter clearfix">
+						<div class="pull-left">
+							<div class="row-filter">
+								<a href="#"><i class="fa fa-th-large"></i></a>
+								<a href="#" class="active"><i class="fa fa-bars"></i></a>
+							</div>
+							<div class="sort-filter">
+								<span class="text-uppercase">Sort By:</span>
+								<select class="input">
+										<option value="0">Position</option>
+										<option value="0">Price</option>
+										<option value="0">Rating</option>
+									</select>
+								<a href="#" class="main-btn icon-btn"><i class="fa fa-arrow-down"></i></a>
+							</div>
+						</div>
+						<div class="pull-right">
+							<div class="page-filter">
+								<span class="text-uppercase">Show:</span>
+								<select class="input">
+										<option value="0">10</option>
+										<option value="1">20</option>
+										<option value="2">30</option>
+									</select>
+							</div>
+							<ul class="store-pages">
+								<li><span class="text-uppercase">Page:</span></li>
+								<li class="active">1</li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+							</ul>
+						</div>
+					</div> {% endcomment %}
+					<!-- /store bottom filter -->
+				</div>
+				<!-- /MAIN -->
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+	<script>
+	// add to cart
+    $(document).on('click','#add-cart-button', function(e){
+      e.preventDefault();
+      const id =$('#add-cart-button').attr('value');
+	  const qty = 1;
+	  var patch = '{% url "addtoshopcart" id=0 %}'.replace('0', id);
+      $.ajax({
+        type:'POST',
+        url: patch,
+        data: {
+          id: id,
+          qty: qty,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          action: 'post'
+        },
+        success: function(json){
+          console.log(json)
+          document.getElementById("cart-count").innerHTML = json.quantity;
+		  document.getElementById("cart-price").innerHTML = json.subtotal + '$';
+          $("#AddModal").modal();
+
+        },
+        error: function(xhr,errmsg,err){
+          console.log(xhr);
+        }
+      });
+    })
+	</script>
+{% endblock %}

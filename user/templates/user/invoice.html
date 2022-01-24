@@ -1,0 +1,100 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="text-center">
+                <i></i>
+				<h1>E-Shop</h1>
+                <h2>Invoice for purchase #{{ order.id }}</h2>
+            </div>
+            <hr>
+            <div class="row">
+                <div>
+                    <div class="panel panel-default height">
+                        <div class="panel-heading">Shipping Address</div>
+                        <div class="panel-body">
+                            {{ order.address }} {{ order.city }} {{ order.country }}<br>
+                            <strong>{{ order.user }}</strong><br>
+                            {{ order.first_name }} {{order.last_name}}<br>
+                            <strong>{{ order.phone }}</strong><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="text-center"><strong>Order summary</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td><strong>Item Name</strong></td>
+                                    <td class="text-center"><strong>Item Price</strong></td>
+                                    <td class="text-center"><strong>Item Quantity</strong></td>
+                                    <td class="text-right"><strong>Total</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rs in orderDetails %}
+                                <tr>
+                                    <td>{{ rs.product.title }}</td>
+                                    <td class="text-center">${{ rs.price }}</td>
+                                    <td class="text-center">{{ rs.quantity }}</td>
+                                    <td class="text-right">${{ rs.amount }}</td>
+                                </tr>
+								{% endfor %}
+                                
+								<br>
+
+                                <tr>
+                                    <td class="highrow"></td>
+                                    <td class="highrow"></td>
+                                    <td class="highrow text-center"><strong>Subtotal</strong></td>
+                                    <td class="highrow text-right">${{ order.total }}</td>
+                                </tr>
+
+								<tr>
+                                    <td class="emptyrow"></td>
+                                    <td class="emptyrow"></td>
+                                    <td class="emptyrow text-center"><strong>Voucher</strong></td>
+                                    <td class="emptyrow text-right">
+									{% if order.voucher %}
+										{{ order.voucher }}
+									{% else %}
+										{{ order.voucher }}
+									{% endif %}
+									</td>
+                                </tr>
+								
+                                <tr>
+                                    <td class="emptyrow"></td>
+                                    <td class="emptyrow"></td>
+                                    <td class="emptyrow text-center"><strong>Shipping</strong></td>
+                                    <td class="emptyrow text-right">{{ shipping_fee }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="emptyrow"><i class="fa fa-barcode iconbig"></i></td>
+                                    <td class="emptyrow"></td>
+                                    <td class="emptyrow text-center"><strong>Total</strong></td>
+                                    <td class="emptyrow text-right">${{ order.total_after_used_voucher }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+.table > tbody > tr > .highrow {
+    border-top: 3px solid;
+}
+</style>

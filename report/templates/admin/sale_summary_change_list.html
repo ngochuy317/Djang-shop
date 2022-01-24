@@ -1,0 +1,80 @@
+{% extends "admin/change_list.html" %}
+
+{% block content_title %}
+    <h1> Sales Summary </h1>
+{% endblock %}
+
+{% block result_list %}
+    
+    <div class="results">
+    <table>
+
+    <thead>
+      <tr>
+        <th>
+          <div class="text">
+            <a href="#">User name</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Total</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Total after user voucher</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Day</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Status</a>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for row in summary %}
+        {% comment %} {% if row.status != 'Canceled' %} {% endcomment %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+            <td> {{ row.first_name }} </td>
+            <td> {{ row.total }} </td>
+            <td> 
+            {% comment %} {% if row.total_after_used_voucher %} {% endcomment %}
+                {{ row.total_after_used_voucher }}
+            {% comment %} {% else %}
+                {{ row.total }} 
+            {% endif %} {% endcomment %}
+            </td>
+            <td> {{ row.create_at }} </td>
+            <td> {{ row.status }} </td>
+        </tr>
+        {% comment %} {% endif %} {% endcomment %}
+      {% endfor %}
+    </tbody>
+
+    <tr style="font-weight:bold; border-top:2px solid #DDDDDD;">
+            <td> Total </td>
+            <td> {{ summary_total.total | floatformat}} $</td>
+            <td>
+            {% if summary_total.total_after_used_voucher %}
+                {{ summary_total.total_after_used_voucher | floatformat }}
+            {% else %}
+                {{ summary_total.total | floatformat }} 
+            {% endif %}
+            $</td>
+    </tr>
+
+  </table>
+</div>
+
+
+{% endblock %}
+
+{% block pagination %}{% endblock %}

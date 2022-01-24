@@ -1,0 +1,326 @@
+    {% load static %}
+
+	<style>
+	a.disabled {
+		pointer-events: none;
+		color: white;
+		background-color: #ccc;
+	}
+	a.del {
+	text-decoration: line-through;
+	} 
+	</style>
+
+	<!-- add modal -->
+	<div style="height: 118px; background-color: black;" class=""></div>
+	<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Notification</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			Add to cart success
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+	</div>
+
+	<!-- section -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- section -->
+	<div class="section section-grey">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<!-- banner -->
+				<div class="col-md-8">
+					<div class="banner banner-1">
+						<img src="{% static './img/hinhhotdeal3.jpg' %}"style="background-size:cover; height:420px" alt="">
+						<div class="banner-caption text-center">
+							{% comment %} <h1 class="primary-color">HOT DEAL<br><span class="white-color font-weak">Up to 50% OFF</span></h1>
+							<button class="primary-btn">Shop Now</button> {% endcomment %}
+						</div>
+					</div>
+				</div>
+				<!-- /banner -->
+
+				<!-- banner -->
+				<div class="col-md-4 col-sm-6">
+					<a class="banner banner-1" href="#">
+						<img src="{% static './img/hinhhotdeal2.jpg' %}"  alt="">
+						<div class="banner-caption text-center">
+							<h2 class="white-color">NEW COLLECTION</h2>
+						</div>
+					</a>
+				</div>
+				<!-- /banner -->
+
+				<!-- banner -->
+				<div class="col-md-4 col-sm-6">
+					<a class="banner banner-1" href="#">
+						<img src="{% static './img/hinhhotdeal1.jpg' %}" alt="">
+						<div class="banner-caption text-center">
+							<h2 class="white-color">NEW COLLECTION</h2>
+						</div>
+					</a>
+				</div>
+				<!-- /banner -->
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-md-12">
+					<div class="section-title">
+						<h2 class="title">Newest Products</h2>
+					</div>
+				</div>
+				<!-- section title -->
+
+				{% for rs in product_newest  %}
+				<!-- Product Single -->
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+					<div class="product product-single">
+						<div class="product-thumb">
+							{% if rs.amount == 0 %}
+								<div class="product-label">
+										<span class="sale">Out of stock</span>
+									</div>
+							{% else %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+									<div class="product-label">
+										<span class="sale">-{{pr.discount}}%</span>
+									</div>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+							<a href="/product/{{rs.id}}/{{rs.slug}}" class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</a>
+							<img src="{{rs.image.url}}" style="height:300px" alt="">
+						</div>
+						<div class="product-body" style="height:190px" >
+							{% if rs.have_discount %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+										<h3 style="display: block" class="product-price">${{rs.discount_price}} <del class="product-old-price">${{rs.price}}</del></h3>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<h3 style="display: block"class="product-price">${{rs.price}}</h3>
+							{% endif %}	
+							<div style="float:none;" class="product-rating">
+									<i class="fa fa-star{%if rs.average_star < 1%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 2%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 3%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 4%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 5%}-o empty{%endif%}"></i>
+									 {{ rs.average_star}}/{{ rs.count_review}} reviews
+							</div>
+							<h2 class="product-name"><a href="#">{{rs.title}}</a></h2>
+							<div class="product-btns text-center">
+								{% comment %} <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button> {% endcomment %}
+								{% comment %} <a href="/order/addtoshopcart/{{rs.id}}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a> {% endcomment %}
+								<a style="width: 100%;" href="#" id="add-cart-button" value="{{rs.id}}" class="primary-btn add-to-cart
+								{% if rs.amount == 0 %}
+									disabled del
+								{% endif %}"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Product Single -->
+				{% endfor %}
+			</div>
+			<!-- row -->
+			<div class="row">
+				<!-- section title -->
+				<div class="col-md-12">
+					<div class="section-title">
+						<h2 class="title">Lasted Products</h2>
+					</div>
+				</div>
+				<!-- section title -->
+
+				{% for rs in products_lasted  %}
+				<!-- Product Single -->
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+					<div class="product product-single">
+						<div class="product-thumb">
+							{% if rs.amount == 0 %}
+								<div class="product-label">
+										<span class="sale">Out of stock</span>
+									</div>
+							{% else %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+									<div class="product-label">
+										<span class="sale">-{{pr.discount}}%</span>
+									</div>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+							<a href="/product/{{rs.id}}/{{rs.slug}}" class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</a>
+							<img src="{{rs.image.url}}" style="height:300px" alt="">
+						</div>
+						<div class="product-body" style="height:190px">
+							{% if rs.have_discount %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+										<h3 style="display: block" class="product-price">${{rs.discount_price}} <del class="product-old-price">${{rs.price}}</del></h3>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<h3 style="display: block"class="product-price">${{rs.price}}</h3>
+							{% endif %}	
+							<div style="float:none;" class="product-rating">
+									<i class="fa fa-star{%if rs.average_star < 1%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 2%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 3%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 4%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 5%}-o empty{%endif%}"></i>
+									 {{ rs.average_star}}/{{ rs.count_review}} reviews
+							</div>
+							<h2 class="product-name"><a href="#">{{rs.title}}</a></h2>
+							<div class="product-btns text-center">
+								{% comment %} <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button> {% endcomment %}
+								{% comment %} <a href="/order/addtoshopcart/{{rs.id}}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a> {% endcomment %}
+								<a style="width: 100%;" href="#" id="add-cart-button" value="{{rs.id}}" class="primary-btn add-to-cart
+								{% if rs.amount == 0 %}
+									disabled del
+								{% endif %}"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Product Single -->
+				{% endfor %}
+			</div>
+			<!-- /row -->
+
+
+			<!-- row -->
+			<div class="row">
+				<!-- section title -->
+				<div class="col-md-12">
+					<div class="section-title">
+						<h2 class="title">Picked For You</h2>
+					</div>
+				</div>
+				<!-- section title -->
+
+				{% for rs in products_picked  %}
+				<!-- Product Single -->
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+					<div class="product product-single">
+						<div class="product-thumb">
+							{% if rs.amount == 0 %}
+								<div class="product-label">
+										<span class="sale">Out of stock</span>
+									</div>
+							{% else %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+									<div class="product-label">
+										<span class="sale">-{{pr.discount}}%</span>
+									</div>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+							<a href="/product/{{rs.id}}/{{rs.slug}}" class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</a>
+							<img src="{{rs.image.url}}" style="height:300px" alt="">
+						</div>
+						<div class="product-body" style="height:190px" >
+							{% if rs.have_discount %}
+								{% for pr in promotions  %}
+									{% if pr.product.id == rs.id %}
+										<h3 style="display: block;" class="product-price">${{rs.discount_price}} <del class="product-old-price">${{rs.price}}</del></h3>
+									{% endif %}
+								{% endfor %}
+							{% else %}
+								<h3 style="display: block;" class="product-price">${{rs.price}}</h3>
+							{% endif %}
+							<div style="float:none;" class="product-rating">
+									<i class="fa fa-star{%if rs.average_star < 1%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 2%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 3%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 4%}-o empty{%endif%}"></i>
+									<i class="fa fa-star{%if rs.average_star < 5%}-o empty{%endif%}"></i>
+									 {{ rs.average_star}}/{{ rs.count_review}} reviews
+							</div>
+							<h2 class="product-name"><a href="#">{{rs.title}}</a></h2>
+							<div class="product-btns text-center">
+								{% comment %} <button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
+								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button> {% endcomment %}
+								{% comment %} <a href="/order/addtoshopcart/{{rs.id}}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a> {% endcomment %}
+								<a style="width: 100%;" href="#" id="add-cart-button" value="{{rs.id}}" class="primary-btn add-to-cart
+								{% if rs.amount == 0 %}
+									disabled del
+								{% endif %}"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Product Single -->
+				{% endfor %}
+
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+	<script>
+    $(document).on('click','#add-cart-button', function(e){
+      e.preventDefault();
+      const id = $(this).attr('value');
+      const qty = 1;
+	  var patch = '{% url "addtoshopcart" id=0 %}'.replace('0', id);
+      $.ajax({
+        type:'POST',
+        url: patch,
+        data: {
+          id: id,
+          qty:qty,
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          action: 'post'
+        },
+        success: function(json){
+          console.log(json)
+          document.getElementById("cart-count").innerHTML = json.quantity;
+		  document.getElementById("cart-price").innerHTML = json.subtotal + '$';
+          $("#AddModal").modal();
+
+        },
+        error: function(xhr,errmsg,err){
+          console.log(xhr);
+        }
+      });
+    })
+	</script>

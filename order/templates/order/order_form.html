@@ -1,0 +1,172 @@
+{% extends 'home/homebase.html' %}
+
+{% block title %} Order Page {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">Order Page</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+							{% if messages %}
+								{% for message in messages %}
+									<div class="alert alert-{{message.tags}}" role="alert">
+										{{ message | safe}}
+									</div>
+								{% endfor %}
+							{% endif %} 
+				<Form action="" method="POST">
+					 {% csrf_token %}
+					<div class="col-md-6">
+						<div class="billing-details">
+                            <div class="section-title">
+                                <h4 class="title">Shipping Details</h4>
+                            </div>
+                            <p><label for="id_first_name">First name:</label>
+                                <input type="text" name="first_name"  value="{{ user.first_name }}" class="input" maxlength="10" required id="id_first_name"></p>
+                            <p><label for="id_last_name">Last name:</label>
+                                <input type="text" name="last_name"  value="{{ user.last_name }}" class="input" maxlength="10" required id="id_last_name"></p>
+                            <p><label for="id_address">Address:</label>
+                                <input type="text" name="address" value="{{ profile.address }}" class="input" maxlength="150" id="id_address"></p>
+                            <p><label for="id_phone">Phone:</label>
+                                <input type="text" name="phone"  value="{{ profile.phone }}"  class="input" maxlength="20" id="id_phone"></p>
+                            <p><label for="id_city">City:</label>
+                                <select name="city" class="input" id="id_city">
+                                    <option value="{{ profile.city }}" selected>{{ profile.city }}</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="tphcm">TP Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                </select></p>
+                            <p><label for="id_first_name">Country :</label>
+                                <input type="text" name="country" class="input" id="id_country" value="{{ profile.country }}"></p>
+                            <div class="pull-right">
+                                <button  type="submit" class="primary-btn">Complete Order</button>
+                            </div>
+                        </div>
+					</div>
+					{% comment %} for payment {% endcomment %}
+					<div class="col-md-6">
+						<div class="shiping-methods">
+                            <div class="section-title">
+                                <h4 class="title">Payment Information</h4>
+                            </div>
+							{% if discount %}
+                            <p><label for="id_first_name">Total: {{ cart_totalprice }} USD </label>
+                                <input type="text" name="total" class="input" readonly value="${{ cart_totalprice }}"></p>
+							{% else %}
+							<p><label for="id_first_name">Total: {{ shopcart.get_total_price }} USD </label>
+                                <input type="text" name="total" class="input" readonly value="${{ shopcart.get_total_price }}"></p>
+							{% endif %}
+                            {% comment %} <p><label for="id_first_name">Credit Card Holder</label>
+                                <input type="text" name="holder" class="input"  value=""></p>
+                            <p><label for="id_first_name">Credit Card Number</label>
+                                <input type="text" name="number" class="input"  value=""></p>
+                            <p><label for="id_first_name">Credit Exp Date/Year</label>
+                                <input type="text" name="ecpdate" class="input"  placeholder="mm/yy"></p>
+                            <p><label for="id_first_name">Security Number</label>
+                                <input type="text" name="secnumber" class="input"  value=""></p> {% endcomment %}
+                        </div>
+					</div> 
+					<div class="col-md-12">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title">Shop Cart List</h3>
+							</div>
+							<table class="shopping-cart-table table">
+								<thead>
+									<tr>
+										<th>Product</th>
+										<th></th>
+										<th class="text-center">Price</th>
+										<th class="text-center">Quantity</th>
+										<th class="text-center">Total</th>
+										<th class="text-right"></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for rs in shopcart %}
+									<tr>
+										<td class="thumb"><img src="{{rs.product_image}}" alt=""></td>
+										<td class="details">
+											<a href="/product/{{ rs.product_id }}/{{ rs.product_slug }}">{{rs.product}}</a>
+											{% comment %} <ul>
+												<li><span>Size: XL</span></li>
+												<li><span>Color: Camelot</span></li>
+											</ul> {% endcomment %}
+										</td>
+										<td class="price text-center"><strong>$
+											{% if rs.product_havediscount %}
+												{{rs.product_discount_price}}
+											{% else %}
+												{{rs.product_price}}
+											{% endif %}</strong>
+										{% comment %} <br><del class="font-weak"><small>$40.00</small></del></td> {% endcomment %}
+										<td class="qty text-center"><strong>{{rs.quantity}}</strong> </td>
+										<td class="total text-center"><strong class="primary-color">${{rs.total_price}}</strong></td>
+									</tr>
+								{% endfor %}
+								</tbody>
+								<tfoot>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>SUBTOTAL</th>
+										<th colspan="2" class="sub-total">${{shopcart.get_subtotal_price}}</th>
+									</tr>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>VOUCHER</th>
+										<td colspan="2" id="promotion-code">
+										{% if discount %}
+											-{{discount}}%
+										{% else %}
+											None
+										{% endif %}
+										</td>
+									</tr>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>SHIPING</th>
+										<td colspan="2">Free Shipping</td>
+									</tr>
+									<tr>
+										<th class="empty" colspan="3"></th>
+										<th>TOTAL</th>
+										<th colspan="2" class="total">$
+										{% if discount %}
+											{{cart_totalprice}}
+										{% else %}
+											{{shopcart.get_total_price}}
+										{% endif %}</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+
+					</div>
+
+					
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock %}

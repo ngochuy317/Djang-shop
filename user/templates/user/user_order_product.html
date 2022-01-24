@@ -1,0 +1,97 @@
+{% extends 'home/homebase.html' %}
+
+{% block title %} Order Product {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">Order Product</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+					<div class="col-md-2">
+						{% include "user/user_panel.html" %}
+					</div>
+					<div class="col-md-10">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title">Order Product</h3>
+							</div>
+
+                        <table class="shopping-cart-table table">
+                            <tr>
+                                <th class="text-left"></th>
+                                <th class="text-left">Product Name </th>
+                                <th class="text-left">Price </th>   
+                                <th class="text-left">Quantity </th>
+                                <th class="text-left">Amount </th>
+                                <th class="text-left">Date </th>
+                                <th class="text-left">Detail </th>
+                            </tr>
+                            {% for rs in order_product %}
+                                <tr>
+                                    <td class="text-left">
+                                        <a href="/product/{{ rs.product_id }}/{{ rs.product.slug }}">
+                                                <img src="{{rs.product.image.url}}" alt="" style="height: 50px">
+                                        </a>
+                                    </td>
+                                    <td class="text-left">{{ rs.product.title}}</td>
+                                    <td class="text-left">{{ rs.price}} </td>
+                                    <td class="text-left">{{ rs.quantity}} </td>
+                                    <td class="text-left">{{ rs.amount}} </td>
+                                    <td class="text-left">{{ rs.create_at}} </td>
+                                    <td class="text-left"><a class="primary-btn" href="/user/order_product_detail/{{ rs.id }}/{{rs.order_id}}"> Detail </a></td>
+                                </tr>
+                            {% endfor %}
+						
+                        </table>
+
+						{% if order_product.has_other_pages %}
+							<ul class="pagination">
+								{% if order_product.has_previous %}
+									<li><a href="?page={{ order_product.previous_page_number }}">&laquo;</a></li>
+								{% else %}
+									<li class="disabled"><span>&laquo;</span></li>
+								{% endif %}
+								{% for i in order_product.paginator.page_range %}
+									{% if order_product.number == i %}
+										<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+									{% else %}
+										<li><a href="?page={{ i }}">{{ i }}</a></li>
+									{% endif %}
+								{% endfor %}
+								{% if order_product.has_next %}
+									<li><a href="?page={{ order_product.next_page_number }}">&raquo;</a></li>
+								{% else %}
+									<li class="disabled"><span>&raquo;</span></li>
+								{% endif %}
+							</ul>
+							{% endif %}
+						</div>
+
+					</div>
+
+					
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'home/homebase.html' %}
+
+{% block title %} Order List {% endblock %}
+{% block description %} {{ setting.description }} {% endblock %}
+{% block keywords %} {{ setting.keywords }} {% endblock %}
+
+{% block sidebar %} {% include 'home/sidebar.html' %} {% endblock %}
+
+{% block body %}
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">Order List</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+					<div class="col-md-3">
+						{% include "user/user_panel.html" %}
+					</div>
+					<div class="col-md-9">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title">Order List</h3>
+							</div>
+                        <table class="shopping-cart-table table">
+                            <tr>
+                                <th class="text-left">Id </th> 
+                                <th class="text-left">Name</th>      
+                                <th class="text-left">Total </th>
+                                <th class="text-left">Status </th>
+                                <th class="text-left">Date </th>
+                                <th class="text-left">Detail </th>
+								{% comment %} <th class="text-left">Export </th> {% endcomment %}
+                            </tr>
+                            {% for rs in orders %}
+                                <tr>
+                                    <td class="text-left">{{ rs.id}} </td>
+                                    <td class="text-left">{{ rs.first_name}} {{ rs.last_name}}</td>
+                                    <td class="text-left">
+									{% if rs.voucher %}
+										{{ rs.total_after_used_voucher}} $
+									{% else %}
+										{{ rs.total}} $
+									{% endif %}
+									</td>
+									 {% if rs.status == 'New' or rs.status == 'Preparing'%}
+                                    <td class="text-left"><span style="background-color:#3498db; color:white; padding:5px">{{ rs.status}}</span> </td>
+									{% elif rs.status == 'Accepted' or rs.status == 'Completed'  %}
+									<td class="text-left"><span style="background-color:#27ae60; color:white;padding:5px">{{ rs.status}}</span> </td>
+									{% elif rs.status == 'OnShipping'%}
+									<td class="text-left"><span style="background-color:#f1c40f; color:white;padding:5px">{{ rs.status}}</span> </td>
+									{% else %}
+									<td class="text-left"><span style="background-color:#e74c3c; color:white;padding:5px">{{ rs.status}}</span> </td>
+									{% endif %} 
+									{% comment %} <td class="text-left">{{ rs.status}}</td> {% endcomment %}
+                                    <td class="text-left">{{ rs.create_at}} </td>
+                                    <td class="text-left"><a class="primary-btn" href="/user/order_detail/{{ rs.id }}"> Detail </a></td>
+									{% comment %} <td class="text-left"><a class="btn btn-info" href="/user/export_invoice/{{ rs.id }}"> Export </a></td> {% endcomment %}
+									<td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+						{% if orders.has_other_pages %}
+							<ul class="pagination">
+								{% if orders.has_previous %}
+									<li><a href="?page={{ orders.previous_page_number }}">&laquo;</a></li>
+								{% else %}
+									<li class="disabled"><span>&laquo;</span></li>
+								{% endif %}
+								{% for i in orders.paginator.page_range %}
+									{% if orders.number == i %}
+										<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+									{% else %}
+										<li><a href="?page={{ i }}">{{ i }}</a></li>
+									{% endif %}
+								{% endfor %}
+								{% if orders.has_next %}
+									<li><a href="?page={{ orders.next_page_number }}">&raquo;</a></li>
+								{% else %}
+									<li class="disabled"><span>&raquo;</span></li>
+								{% endif %}
+							</ul>
+							{% endif %}
+						</div>
+
+					</div>
+
+					
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock %}
